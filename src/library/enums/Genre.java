@@ -1,4 +1,4 @@
-package library;
+package library.enums;
 
 public enum Genre {
     EPIC,
