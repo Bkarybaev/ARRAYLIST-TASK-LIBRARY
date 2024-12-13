@@ -22,21 +22,52 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public List<Book> getAllBooks(Long libraryId) {
-        return List.of();
+        for (Library library : Database.libraries) {
+            if (library.getId().equals(libraryId)){
+                return library.getBooks();
+            }
+        }
+        return null;
     }
 
     @Override
     public Book getBookById(Long libraryId, Long bookId) {
+        for (Library library : Database.libraries) {
+            if (library.getId().equals(libraryId)){
+                for (Book book : library.getBooks()) {
+                    if (book.getBookId().equals(bookId)){
+                        return book;
+                    }
+                }
+                break;
+            }
+        }
         return null;
     }
 
     @Override
     public String deleteBook(Long libraryId, Long bookId) {
-        return "";
+        for (Library library : Database.libraries) {
+            if (library.getId().equals(libraryId)){
+                for (int i = 0; i < library.getBooks().size(); i++) {
+                    if (library.getBooks().get(i).getBookId().equals(bookId)){
+                        library.getBooks().remove(i);
+                        return "Deleted!!";
+                    }
+                }
+                break;
+            }
+        }
+        return "not fount!!";
     }
 
     @Override
     public void clearBooksByLibraryId(Long libraryId) {
-
+        for (Library l : Database.libraries) {
+            if (l.getId().equals(libraryId)){
+                l.getBooks().clear();
+                break;
+            }
+        }
     }
 }

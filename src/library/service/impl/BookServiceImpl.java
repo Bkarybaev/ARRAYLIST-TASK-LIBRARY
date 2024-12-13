@@ -28,8 +28,8 @@ public class BookServiceImpl implements BookService {
             if (book.getName() == null) {
                 throw new RuntimeException("book name null!!");
             }
-        bookDao.saveBook(libraryId, book);
-        return book;
+            bookDao.saveBook(libraryId, book);
+            return book;
         } catch (RuntimeException e) {
             System.out.println(e.getMessage());
         }
@@ -38,21 +38,61 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getAllBooks(Long libraryId) {
-        return List.of();
+        try {
+            if (libraryId == null || 0 > libraryId) {
+                throw new RuntimeException("Error exception !!");
+            } else {
+                boolean l = true;
+                for (Library library : Database.libraries) {
+                    if (libraryId.equals(library.getId())) {
+                        l = false;
+                    }
+                }
+                if (l) throw new RuntimeException("not fount!!");
+            }
+            return bookDao.getAllBooks(libraryId);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
     @Override
     public Book getBookById(Long libraryId, Long bookId) {
+        try {
+            if (libraryId == null || libraryId < 0 || bookId == null || bookId < 0) {
+            throw new RuntimeException("id Error!!");
+            }
+            return bookDao.getBookById(libraryId, bookId);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+        }
         return null;
     }
 
     @Override
     public String deleteBook(Long libraryId, Long bookId) {
-        return "";
+        try {
+            if (libraryId == null || libraryId < 0 || bookId == null || bookId < 0) {
+                throw new RuntimeException("id Error!!");
+            }
+             bookDao.deleteBook(libraryId, bookId);
+        } catch (RuntimeException e) {
+            return e.getMessage();
+        }
+        return "Successfully!!";
     }
 
     @Override
     public void clearBooksByLibraryId(Long libraryId) {
-
+        try {
+            if (libraryId == null || libraryId < 0){
+                throw new RuntimeException("Error library id!!");
+            }
+            bookDao.clearBooksByLibraryId(libraryId);
+            System.out.println("Successfully clear books !");
+        }catch (RuntimeException e){
+            System.out.println(e.getMessage());
+        }
     }
 }

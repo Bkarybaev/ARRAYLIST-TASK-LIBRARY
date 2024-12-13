@@ -1,10 +1,13 @@
 package library;
 
+import library.enums.Gender;
 import library.enums.Genre;
 import library.models.Book;
 import library.models.Library;
+import library.models.Reader;
 import library.service.impl.BookServiceImpl;
 import library.service.impl.LibraryServiceImpl;
+import library.service.impl.ReaderServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -12,17 +15,30 @@ import java.util.Scanner;
 public class Main {
     static LibraryServiceImpl libraryService = new LibraryServiceImpl();
     static BookServiceImpl bookService = new BookServiceImpl();
+    static ReaderServiceImpl readerService = new ReaderServiceImpl();
 
     public static void main(String[] args) {
 
         while (true) {
             System.out.print("""
-                    1.Add library
-                    2.Get All library
-                    3.Get by id library
-                    4.Update library
-                    5.Deleted by id library
-                    6.Book save
+                    --------- Welcome to Library --------
+                    1.Add library                       =
+                    2.Get All library                   =
+                    3.Get by id library                 =
+                    4.Update library                    =
+                    5.Deleted by id library             =
+                    6.Book save                         =
+                    7.Get all books                     =
+                    8.Get Book By Id                    =
+                    9.Delete book                       =
+                    10.Clear Books By Library Id        =
+                    11.Save Reader                      =
+                    12.Get All Readers                  =
+                    13.Get Reader By Id                 =
+                    14.Update Reader                    =
+                    15.Assign Reader To Library         =
+                    0.Logout >                          =
+                    -------------------------------------
                     """);
             System.out.print("choice: ");
             String choice = new Scanner(System.in).nextLine();
@@ -33,7 +49,17 @@ public class Main {
                 case "4" -> System.out.println(libraryService.updateLibrary(updateIdLibrary(), updateLibrary()));
                 case "5" -> System.out.println(libraryService.deleteLibrary(deleteIdLibrary()));
                 case "6" -> System.out.println(bookService.saveBook(bookSaveLibraryId(), newBookAdd()));
+                case "7" -> System.out.println(bookService.getAllBooks(getAllBooksLibraryID()));
+                case "8" -> System.out.println(bookService.getBookById(updateIdLibrary(), getByBookID()));
+                case "9" -> System.out.println(bookService.deleteBook(updateIdLibrary(), getByBookID()));
+                case "10" -> bookService.clearBooksByLibraryId(updateIdLibrary());
+                case "11" -> readerService.saveReader(saveReader());
+                case "12" -> System.out.println(readerService.getAllReaders());
+                case "13" -> System.out.println(readerService.getReaderById(readerId()));
+                case "14" -> System.out.println(readerService.updateReader(readerId(), saveReader()));
+                case "15" -> readerService.assignReaderToLibrary(readerId(),updateIdLibrary());
                 case "0" -> {
+                    System.out.println("\n  Logout...");
                     return;
                 }
                 default -> {
@@ -41,6 +67,42 @@ public class Main {
                 }
             }
         }
+    }
+    public static Long readerId(){
+        System.out.print("write id reader: ");
+        return new Scanner(System.in).nextLong();
+    }
+    public static Reader saveReader(){
+        System.out.print("write full name: ");
+        String fullName = new Scanner(System.in).nextLine();
+
+        System.out.print("write email: ");
+        String email = new Scanner(System.in).nextLine();
+
+        System.out.print("write phone Number: ");
+        String phoneNumber = new Scanner(System.in).nextLine();
+
+        System.out.print("write gender (MALE, FEMALE): ");
+        String gender = new Scanner(System.in).nextLine().toUpperCase();
+        Gender gen = null;
+
+        switch (gender){
+            case "MALE" -> gen = Gender.MALE;
+            case "FEMALE" -> gen = Gender.FEMALE;
+            default -> System.out.println("Error choice!!");
+        }
+        return new Reader(fullName,email,phoneNumber,gen);
+
+    }
+    public static Long getByBookID(){
+        System.out.print("write id book: ");
+        return new Scanner(System.in).nextLong();
+    }
+
+
+    public static Long getAllBooksLibraryID(){
+        System.out.print("write id Library: ");
+        return new Scanner(System.in).nextLong();
     }
 
 
